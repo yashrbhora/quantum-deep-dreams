@@ -80,6 +80,7 @@ def batch_process(folder):
 
         paramA.append(param1)
         paramB.append(param2)
+        print('Done!')
 
     return paramA, paramB
 
