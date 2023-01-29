@@ -21,7 +21,7 @@ def compute_scores(probabilities):
     for key, val in probabilities.items():
         #print(key, val)
         for i in range(len(key)):
-            vid_counts[i] += float(key[::-1][i])*val
+            vid_counts[i] += float(key[i])*val
     #print(vid_counts)
     vid_counts = {key:val/sum(vid_counts.values()) for key,val in vid_counts.items()}
     return vid_counts
@@ -100,7 +100,8 @@ def get_quantum_parameters(no_vids, inputs_var1, inputs_var2):
     print("probs", probs)
     probs_post = [post_process(prob_dist, no_vids) for prob_dist in probs] 
     print("probs_post", probs_post)
-    probs_post_post = [{key:val/sum(prob_post_dist.values()) for key,val in prob_post_dist.items()} for prob_post_dist in probs_post]
+    probs_post_post = [compute_scores(prob_post_dist) for prob_post_dist in probs_post]
+    #probs_post_post = [{key:val/sum(prob_post_dist.values()) for key,val in prob_post_dist.items()} for prob_post_dist in probs_post]
     print("probs_post_post", probs_post_post)
     return probs_post_post
 
