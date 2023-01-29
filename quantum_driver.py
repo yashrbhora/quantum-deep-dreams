@@ -23,7 +23,7 @@ def compute_scores(probabilities):
         for i in range(len(key)):
             vid_counts[i] += float(key[i])*val
     #print(vid_counts)
-    vid_counts = {key:val/sum(vid_counts.values()) for key,val in vid_counts.items()}
+    #vid_counts = {key:val/sum(vid_counts.values()) for key,val in vid_counts.items()}
     return vid_counts
 
 def get_quantum_parameters(no_outputs, inputs):
@@ -49,8 +49,8 @@ def get_quantum_parameters(no_outputs, inputs):
 def get_quantum_parameters_one_step(no_vids, inputs_var1, inputs_var2):
     """ inputs_var1, inputs_var2: no_videos """
     # setup
-    no_qubits = no_vids * len(inputs_var1)
-    print("no_qubits", no_qubits)
+    no_qubits = no_vids * 2
+    print("no_qubits", no_qubits, "len(inputs_var1)", len(inputs_var1))
     params = {}
     for i in range(no_vids):
         for j in [0,1]: # different features
@@ -62,11 +62,12 @@ def get_quantum_parameters_one_step(no_vids, inputs_var1, inputs_var2):
     #coupling = [list(range(i,i+2)) for i in [0,2]]
     my_list = list(range(no_qubits))
     coupling = []
-    for i in range(0, no_qubits, no_vids):
+    for i in range(0, no_qubits, 2):
         x = i
-        coupling.append((my_list[x:x+no_vids]))
+        coupling.append((my_list[x:x+2]))
     print("COUPLING", coupling)
     for pair in coupling:
+        print(pair, pair[0], pair[1])
         qfm.cx(pair[0], pair[1])
     #qfm.prepare_state([1/np.sqrt(2**no_qubits)+0j]*2**no_qubits)
     counter = 0
@@ -110,16 +111,14 @@ def post_process(dict, no_vids):
     for key, val in dict.items():
         my_list = list(range(len(key)))
         coupling = []
-        for i in range(0, len(key), no_vids):
+        for i in range(0, len(key), 2):
             x = i
-            coupling.append((my_list[x:x+no_vids]))
+            coupling.append((my_list[x:x+2]))
         target_key = [0]*no_vids
         for li_index, li in enumerate(coupling):
             relevant_indices = [int(i) for i in li]
-            print([type(elem) for elem in li])
-            print([int(i) for i in li])
-            print(li_index, li)
-            print(key[relevant_indices[0]:relevant_indices[-1]])
+            #print("li_index, li", li_index, li)
+            #print(key[relevant_indices[0]:relevant_indices[-1]])
             if "1" in key[relevant_indices[0]:relevant_indices[-1]]:
                 target_key[li_index] = 1
         target_key = ''.join([f"{target_key_item}" for target_key_item in target_key])
