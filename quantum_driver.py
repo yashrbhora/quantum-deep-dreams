@@ -9,7 +9,7 @@ from qiskit_ionq import IonQProvider
 # global params
 no_qubits = 8
 
-provider = IonQProvider("CW8P78VEqL4NFcMKkXMq5tFu193Hzazs")
+provider = IonQProvider("insert_key")
 backend = provider.get_backend("ionq_simulator")
 
 def bind(circ, vals_dict):
